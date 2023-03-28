@@ -1,35 +1,62 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import React from 'react';
 import {Header, TextInput, Gap, Button} from '../../components';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {useForm} from '../../utils';
 
 const SignUp = ({navigation}) => {
-  const globalState = useSelector(state => state.globalReducer);
-  console.log('global: ', globalState);
+  const [form, setForm] = useForm({
+    name: '',
+    email: '',
+    password: '',
+  });
+
+  const dispatch = useDispatch();
+
+  const onSubmit = () => {
+    console.log('form', form);
+    dispatch({type: 'SET_REGISTER', value: form});
+    navigation.navigate('SignUpAdress');
+  };
+
   return (
-    <View style={styles.page}>
-      <Header title="Sign Up" subTitle="Register and Eat" onBack={() => {}} />
-      <View style={styles.container}>
-        <View style={styles.photo}>
-          <View style={styles.borderPhoto}>
-            <View style={styles.photoContainer}>
-              <Text style={styles.addPhoto}>Add Photo</Text>
+    <ScrollView contentContainerStyle={{flexGrow: 1}}>
+      <View style={styles.page}>
+        <Header title="Sign Up" subTitle="Register and Eat" onBack={() => {}} />
+        <View style={styles.container}>
+          <View style={styles.photo}>
+            <View style={styles.borderPhoto}>
+              <View style={styles.photoContainer}>
+                <Text style={styles.addPhoto}>Add Photo</Text>
+              </View>
             </View>
           </View>
+          <TextInput
+            label="Full Name"
+            placeholder="Type Your Full Name"
+            value={form.name}
+            onChangeText={value => setForm('name', value)}
+          />
+          <Gap height={16} />
+          <TextInput
+            label="Email Address"
+            placeholder="Type Your Email"
+            value={form.email}
+            onChangeText={value => setForm('email', value)}
+          />
+          <Gap height={16} />
+          <TextInput
+            label="Password"
+            placeholder="Type Your Password"
+            value={form.password}
+            onChangeText={value => setForm('password', value)}
+            secureTextEntry
+          />
+          <Gap height={24} />
+          <Button text="Continue" onPress={onSubmit} />
         </View>
-        <Text>{`status error: ${globalState.isError}`}</Text>
-        <TextInput label="Full Name" placeholder="Type Your Full Name" />
-        <Gap height={16} />
-        <TextInput label="Email Address" placeholder="Type Your Email " />
-        <Gap height={16} />
-        <TextInput label="Password" placeholder="Type Your Password" />
-        <Gap height={24} />
-        <Button
-          text="Continue"
-          onPress={() => navigation.navigate('SignUpAdress')}
-        />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
