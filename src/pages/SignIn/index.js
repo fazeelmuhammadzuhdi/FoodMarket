@@ -1,8 +1,9 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
+import {useDispatch} from 'react-redux';
 import {Button, Gap, Header, TextInput} from '../../components';
+import {signInAction} from '../../redux/action';
 import {useForm} from '../../utils';
-import axios from 'axios';
 
 const SignIn = ({navigation}) => {
   // const [email, setEmail] = useState('');
@@ -13,18 +14,11 @@ const SignIn = ({navigation}) => {
     password: '',
   });
 
-  const onSubmit = () => {
-    // console.log('form: ', form);
-    axios
-      .post('http://foodmarket-backend.buildwithangga.id/api/login', form)
-      .then(res => {
-        console.log('success', res);
-      })
-      .catch(err => {
-        console.log('error', err);
-      });
-  };
+  const dispatch = useDispatch();
 
+  const onSubmit = () => {
+    dispatch(signInAction(form, navigation));
+  };
   return (
     <View style={styles.page}>
       <Header title="Sign In" subTitle="Find Your Best Ever Meal" />
