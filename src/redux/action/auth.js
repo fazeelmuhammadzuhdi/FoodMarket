@@ -1,11 +1,8 @@
 import axios from 'axios';
+import {API_HOST} from '../../config';
 import {setLoading} from '../../redux/action';
 import {showMessage} from '../../utils';
 import {storeData} from '../../utils/storage';
-
-const API_HOST = {
-  url: 'http://foodmarket-backend.buildwithangga.id/api',
-};
 
 export const signUpAction =
   (dataRegister, photoReducer, navigation) => dispatch => {

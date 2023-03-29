@@ -3,8 +3,13 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
 import {ProfileDummy} from '../../../assets';
 import {getData} from '../../../utils/storage';
+import {Button} from '../../atoms';
 
 const HomeProfile = () => {
+  const onSubmit = () => {
+    navigation.navigate('Profile');
+  };
+
   const navigation = useNavigation();
   const [photo, setPhoto] = useState(ProfileDummy);
 
@@ -21,6 +26,8 @@ const HomeProfile = () => {
         <Text style={styles.appName}>FoodMarket</Text>
         <Text style={styles.desc}>Let's Get Some Foods</Text>
       </View>
+      <Button text="Profile" onPress={onSubmit} />
+
       <Image source={photo} style={styles.profile} />
     </View>
   );
