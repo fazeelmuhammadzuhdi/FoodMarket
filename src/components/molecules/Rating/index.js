@@ -35,8 +35,12 @@ const styles = StyleSheet.create({
 
   ratingContainer: {
     flexDirection: 'row',
-    textAlign: 'center',
   },
 
-  numberRating: {fontSize: 12, fontFamily: 'Poppins-Regular', color: '#8D92A3'},
+  numberRating: {
+    fontSize: 12,
+    fontFamily: 'Poppins-Regular',
+    color: '#8D92A3',
+    marginTop: 2,
+  },
 });

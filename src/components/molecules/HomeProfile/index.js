@@ -6,10 +6,6 @@ import {getData} from '../../../utils/storage';
 import {Button} from '../../atoms';
 
 const HomeProfile = () => {
-  const onSubmit = () => {
-    navigation.navigate('Profile');
-  };
-
   const navigation = useNavigation();
   const [photo, setPhoto] = useState(ProfileDummy);
 
@@ -26,7 +22,14 @@ const HomeProfile = () => {
         <Text style={styles.appName}>FoodMarket</Text>
         <Text style={styles.desc}>Let's Get Some Foods</Text>
       </View>
-      <Button text="Profile" onPress={onSubmit} />
+
+      <View style={styles.button}>
+        <Button text="Profile" onPress={() => navigation.navigate('Profile')} />
+      </View>
+
+      <View style={styles.button}>
+        <Button text="Order" onPress={() => navigation.navigate('Order')} />
+      </View>
 
       <Image source={photo} style={styles.profile} />
     </View>
@@ -58,5 +61,9 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 8,
+  },
+
+  button: {
+    marginEnd: 5,
   },
 });
