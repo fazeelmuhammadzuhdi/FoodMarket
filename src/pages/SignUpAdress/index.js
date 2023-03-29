@@ -1,10 +1,9 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {Header, TextInput, Gap, Button, Select} from '../../components';
-import {useForm} from '../../utils';
+import {useForm, showMessage} from '../../utils';
 import {useDispatch, useSelector} from 'react-redux';
 import axios from 'axios';
-import {showMessage, hideMessage} from 'react-native-flash-message';
 
 const SignUpAddress = ({navigation}) => {
   const [form, setForm] = useForm({
@@ -15,7 +14,7 @@ const SignUpAddress = ({navigation}) => {
   });
 
   const dispatch = useDispatch();
-  const registerReducer = useSelector(state => state.registerReducer);
+  const {registerReducer, photoReducer} = useSelector(state => state);
 
   const onSubmit = () => {
     console.log('form :', form);
@@ -30,25 +29,41 @@ const SignUpAddress = ({navigation}) => {
       .post('http://foodmarket-backend.buildwithangga.id/api/register', data)
       .then(res => {
         console.log('data success :', res.data);
-        showMessage('Register Success', 'success');
-        dispatch({type: 'SET_LOADING', value: false});
 
+        if (photoReducer.isUploadPhoto) {
+          const photoForUpload = new FormData();
+          photoForUpload.append('file', photoReducer);
+
+          axios
+            .post(
+              'http://foodmarket-backend.buildwithangga.id/api/user/photo',
+              photoForUpload,
+              {
+                headers: {
+                  Authorization: `${res.data.data.token_type} ${res.data.data.access_token}`,
+                  'Content-Type': 'multipart/form-data',
+                },
+              },
+            )
+            .then(resUpload => {
+              console.log('upload photo success :', resUpload);
+            })
+            // eslint-disable-next-line handle-callback-err
+            .catch(err => {
+              showMessage('Upload photo failed');
+            });
+        }
+
+        dispatch({type: 'SET_LOADING', value: false});
+        showMessage('Register Success', 'success');
         navigation.replace('SuccessSignUp');
       })
       .catch(err => {
         // console.log('sign up error :', err.response.data.message);
         dispatch({type: 'SET_LOADING', value: false});
 
-        showToast(err?.response?.data?.message);
+        showMessage(err?.response?.data?.message);
       });
-  };
-
-  const showToast = (message, type) => {
-    showMessage({
-      message,
-      type: type === 'success' ? 'success' : 'danger',
-      backgroundColor: type === 'success' ? '#16FF00' : '#E21818',
-    });
   };
 
   return (
