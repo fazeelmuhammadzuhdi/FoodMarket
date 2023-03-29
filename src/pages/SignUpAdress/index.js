@@ -1,9 +1,9 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import {Header, TextInput, Gap, Button, Select} from '../../components';
-import {useForm, showMessage} from '../../utils';
 import {useDispatch, useSelector} from 'react-redux';
-import axios from 'axios';
+import {Button, Gap, Header, Select, TextInput} from '../../components';
+import {setLoading, signUpAction} from '../../redux/action';
+import {useForm} from '../../utils';
 
 const SignUpAddress = ({navigation}) => {
   const [form, setForm] = useForm({
@@ -23,47 +23,48 @@ const SignUpAddress = ({navigation}) => {
       ...registerReducer,
     };
     console.log('data register: ', data);
-    dispatch({type: 'SET_LOADING', value: true});
+    dispatch(setLoading(true));
+    dispatch(signUpAction(data, photoReducer, navigation));
 
-    axios
-      .post('http://foodmarket-backend.buildwithangga.id/api/register', data)
-      .then(res => {
-        console.log('data success :', res.data);
+    // axios
+    //   .post('http://foodmarket-backend.buildwithangga.id/api/register', data)
+    //   .then(res => {
+    //     console.log('data success :', res.data);
 
-        if (photoReducer.isUploadPhoto) {
-          const photoForUpload = new FormData();
-          photoForUpload.append('file', photoReducer);
+    //     if (photoReducer.isUploadPhoto) {
+    //       const photoForUpload = new FormData();
+    //       photoForUpload.append('file', photoReducer);
 
-          axios
-            .post(
-              'http://foodmarket-backend.buildwithangga.id/api/user/photo',
-              photoForUpload,
-              {
-                headers: {
-                  Authorization: `${res.data.data.token_type} ${res.data.data.access_token}`,
-                  'Content-Type': 'multipart/form-data',
-                },
-              },
-            )
-            .then(resUpload => {
-              console.log('upload photo success :', resUpload);
-            })
-            // eslint-disable-next-line handle-callback-err
-            .catch(err => {
-              showMessage('Upload photo failed');
-            });
-        }
+    //       axios
+    //         .post(
+    //           'http://foodmarket-backend.buildwithangga.id/api/user/photo',
+    //           photoForUpload,
+    //           {
+    //             headers: {
+    //               Authorization: `${res.data.data.token_type} ${res.data.data.access_token}`,
+    //               'Content-Type': 'multipart/form-data',
+    //             },
+    //           },
+    //         )
+    //         .then(resUpload => {
+    //           console.log('upload photo success :', resUpload);
+    //         })
+    //         // eslint-disable-next-line handle-callback-err
+    //         .catch(err => {
+    //           showMessage('Upload photo failed');
+    //         });
+    //     }
 
-        dispatch({type: 'SET_LOADING', value: false});
-        showMessage('Register Success', 'success');
-        navigation.replace('SuccessSignUp');
-      })
-      .catch(err => {
-        // console.log('sign up error :', err.response.data.message);
-        dispatch({type: 'SET_LOADING', value: false});
+    //     dispatch(setLoading(false));
+    //     showMessage('Register Success', 'success');
+    //     navigation.replace('SuccessSignUp');
+    //   })
+    //   .catch(err => {
+    //     // console.log('sign up error :', err.response.data.message);
+    //     dispatch(setLoading(false));
 
-        showMessage(err?.response?.data?.message);
-      });
+    //     showMessage(err?.response?.data?.message);
+    //   });
   };
 
   return (
@@ -72,7 +73,7 @@ const SignUpAddress = ({navigation}) => {
         <Header
           title="Adress"
           subTitle="Make Sure It's Valid"
-          onBack={() => {}}
+          onBack={() => navigation.goBack()}
         />
         <View style={styles.container}>
           <TextInput

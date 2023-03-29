@@ -8,7 +8,7 @@ const Header = ({title, subTitle, onBack}) => {
       {
         // If onBack is true, then show the back button
         onBack && (
-          <TouchableOpacity activeOpacity={0.7}>
+          <TouchableOpacity activeOpacity={0.7} onPress={onBack}>
             <View style={styles.back}>
               <IcBack />
             </View>
