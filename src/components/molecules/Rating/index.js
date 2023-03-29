@@ -1,6 +1,8 @@
-import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {StyleSheet, View} from 'react-native';
+import {Text} from 'react-native-svg';
 import {IcStarOff, IcStarOn} from '../../../assets';
+import Number from '../Number';
 
 const Rating = ({number}) => {
   const renderStar = () => {
@@ -17,7 +19,8 @@ const Rating = ({number}) => {
   return (
     <View style={styles.ratingContainer}>
       <View style={styles.starContainer}>{renderStar()}</View>
-      <Text>{number}</Text>
+      <Number number={number} type="decimal" style={styles.numberRating} />
+      {/* <Text>{number}</Tex> */}
     </View>
   );
 };
@@ -34,4 +37,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     textAlign: 'center',
   },
+
+  numberRating: {fontSize: 12, fontFamily: 'Poppins-Regular', color: '#8D92A3'},
 });
