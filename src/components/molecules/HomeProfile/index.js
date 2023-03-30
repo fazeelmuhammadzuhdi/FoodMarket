@@ -23,13 +23,13 @@ const HomeProfile = () => {
         <Text style={styles.desc}>Let's Get Some Foods</Text>
       </View>
 
-      <View style={styles.button}>
+      {/* <View style={styles.button}>
         <Button text="Profile" onPress={() => navigation.navigate('Profile')} />
       </View>
 
       <View style={styles.button}>
         <Button text="Order" onPress={() => navigation.navigate('Order')} />
-      </View>
+      </View> */}
 
       <Image source={photo} style={styles.profile} />
     </View>
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
 
-  button: {
-    marginEnd: 5,
-  },
+  // button: {
+  //   marginEnd: 5,
+  // },
 });
