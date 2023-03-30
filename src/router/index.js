@@ -4,6 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import React from 'react';
 import {
+  EditProfile,
   FoodDetail,
   Home,
   Order,
@@ -92,6 +93,11 @@ const Router = () => {
       <Stack.Screen
         name="OrderDetail"
         component={OrderDetail}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

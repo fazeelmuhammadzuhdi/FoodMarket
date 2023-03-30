@@ -1,18 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
-import {
-  StyleSheet,
-  Text,
-  View,
-  useWindowDimensions,
-  ScrollView,
-} from 'react-native';
-import React from 'react';
-import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
-import ItemListFood from '../ItemListFood';
-import {FoodDummy1, FoodDummy2, FoodDummy3, FoodDummy4} from '../../../assets';
-import {useNavigation} from '@react-navigation/native';
-import ItemListMenu from '../ItemListMenu';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
+import React from 'react';
+import {StyleSheet, Text, useWindowDimensions, View} from 'react-native';
+import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
+import ItemListMenu from '../ItemListMenu';
 
 const renderTabBar = props => (
   <TabBar
@@ -50,7 +42,10 @@ const Account = () => {
   };
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
-      <ItemListMenu text="Edit Profile" />
+      <ItemListMenu
+        text="Edit Profile"
+        onPress={() => navigation.navigate('EditProfile')}
+      />
       <ItemListMenu text="Home Address" />
       <ItemListMenu text="Security" />
       <ItemListMenu text="Payments" />
@@ -60,7 +55,6 @@ const Account = () => {
 };
 
 const FoodMarket = () => {
-  const navigation = useNavigation();
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
       <ItemListMenu text="Rate App " />

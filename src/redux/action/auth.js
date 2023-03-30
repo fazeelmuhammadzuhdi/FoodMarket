@@ -13,7 +13,7 @@ export const signUpAction =
         const profile = res.data.data.user;
         // console.log('data success :', res.data);
 
-        storeData('userProfile', profile);
+        // storeData('userProfile', profile);
         storeData('token', {value: token});
 
         if (photoReducer.isUploadPhoto) {
