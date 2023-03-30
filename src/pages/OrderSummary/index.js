@@ -1,10 +1,78 @@
+import axios from 'axios';
+import React, {useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
-import {Button, Gap, Header, ItemListFood, ItemValue} from '../../components';
-import {FoodDummy1} from '../../assets';
+import {WebView} from 'react-native-webview';
+import {
+  Button,
+  Gap,
+  Header,
+  ItemListFood,
+  ItemValue,
+  Loading,
+} from '../../components';
+import {API_HOST} from '../../config';
+import {getData, showMessage} from '../../utils';
 
 const OrderSummary = ({navigation, route}) => {
   const {item, transaction, userProfile} = route.params;
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
+  const [paymentURL, setPaymentURL] = useState('https://google.com');
+
+  const onCheckout = () => {
+    const data = {
+      food_id: item.id,
+      user_id: userProfile.id,
+      quantity: transaction.totalItem,
+      total: transaction.total,
+      status: 'PENDING',
+    };
+    getData('token').then(resToken => {
+      axios
+        .post(`${API_HOST.url}/checkout`, data, {
+          headers: {
+            Authorization: resToken.value,
+          },
+        })
+        .then(res => {
+          setIsPaymentOpen(true);
+          setPaymentURL(res.data.data.payment_url);
+        })
+        .catch(err => {
+          showMessage(
+            `${err?.response?.data?.message} on Checkout API` ||
+              'Terjadi Kesalahan di API Checkout',
+          );
+        });
+    });
+  };
+
+  const onNavChange = state => {
+    // TODO: Use This For Production
+    // const urlSuccess =
+    //   'http://foodmarket-backend.buildwithangga.id/midtrans/success?order_id=574&status_code=201&transaction_status=pending';
+    const titleWeb = 'Laravel';
+    if (state.title === titleWeb) {
+      navigation.reset({index: 0, routes: [{name: 'SuccessOrder'}]});
+    }
+  };
+
+  if (isPaymentOpen) {
+    return (
+      <>
+        <Header
+          title="Payment"
+          subTitle="You deserve better meal"
+          onBack={() => setIsPaymentOpen(false)}
+        />
+        <WebView
+          source={{uri: paymentURL}}
+          startInLoadingState={true}
+          renderLoading={() => <Loading />}
+          onNavigationStateChange={onNavChange}
+        />
+      </>
+    );
+  }
   return (
     <ScrollView>
       <Header
@@ -46,7 +114,7 @@ const OrderSummary = ({navigation, route}) => {
         <ItemValue label="City" value={userProfile.city} />
       </View>
       <View style={styles.button}>
-        {/* <Button text="Checkout Now" onPress={onCheckout} /> */}
+        <Button text="Checkout Now" onPress={onCheckout} />
       </View>
       <Gap height={40} />
     </ScrollView>
